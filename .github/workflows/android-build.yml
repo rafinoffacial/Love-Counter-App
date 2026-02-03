@@ -10,25 +10,32 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # এখানে কোটেশন মার্ক ব্যবহার করা নিরাপদ
+          node-version: '22'
 
-      - name: Setup Java (Android Build এর জন্য প্রয়োজন)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17' # অ্যান্ড্রয়েড বিল্ডের জন্য JDK 17 সবচেয়ে স্থিতিশীল
+          java-version: '17'
 
-      - name: Install Ionic and Capacitor
+      - name: Install Dependencies
         run: |
-          npm install -g @ionic/cli
-          cd myApp && npm install
+          cd myApp
+          npm install
+          # Capacitor Android প্ল্যাটফর্মটি এখানে ইনস্টল করা হচ্ছে
+          npm install @capacitor/android 
+
+      - name: Build Web Assets (www ফোল্ডার তৈরি করা)
+        run: |
+          cd myApp
+          # এটি আপনার কোডকে কম্পাইল করে www ফোল্ডার তৈরি করবে
+          npm run build 
 
       - name: Prepare Android Project
         run: |
           cd myApp
-          # npx ব্যবহার করার সময় স্থানীয় ভার্সন ব্যবহার নিশ্চিত করা হচ্ছে
-          ./node_modules/.bin/cap add android || echo "Android already exists"
-          ./node_modules/.bin/cap sync
+          npx cap add android || echo "Android already exists"
+          npx cap sync
 
       - name: Build APK with Gradle
         run: |
