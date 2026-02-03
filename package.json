@@ -1,8 +1,6 @@
 {
   "name": "love-counter-app",
   "version": "1.0.0",
-  "description": "Love Counter Application",
-  "main": "index.html",
   "scripts": {
     "build": "mkdir -p www && cp index.html www/"
   },
