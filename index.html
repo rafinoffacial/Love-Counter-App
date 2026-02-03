@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nawal's Love Counter</title>
+    <link rel="icon" type="image/png" id="favicon" href="https://ui-avatars.com/api/?name=L+N&background=ff758c&color=fff&rounded=true">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #1a0510 0%, #2b1026 100%);
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --text-color: #ffe6ea;
+            --accent-pink: #ff758c; 
+            --accent-glow: rgba(255, 117, 140, 0.3);
+        }
+        body {
+            background: var(--bg-gradient); color: var(--text-color);
+            font-family: 'Quicksand', sans-serif; margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { text-align: center; margin-top: 50px; }
+        h1 { font-family: 'Dancing Script'; font-size: 3rem; color: var(--accent-pink); }
+        .info { background: var(--card-glass); border: var(--card-border); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Love Counter</h1>
+        <div class="info">
+            <p>Your app is being built into an Android APK...</p>
+            <p>Check the "Actions" tab in GitHub.</p>
+        </div>
+    </div>
+    <script>
+        console.log("App loaded successfully");
+    </script>
+</body>
+</html>

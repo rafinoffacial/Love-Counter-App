@@ -1,47 +1,32 @@
 name: Build Android APK
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # স্ট্যাবল ভার্সন
-
+          node-version: '20'
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Install Dependencies & Build Web
+      - name: Install & Build
         run: |
-          cd myApp
           npm install
-          # অ্যান্ড্রয়েড লাইব্রেরিগুলো জোরপূর্বক ইনস্টল করা হচ্ছে
-          npm install @capacitor/android @capacitor/core @capacitor/cli
-          # 'www' ফোল্ডার তৈরি করার জন্য এই কমান্ডটি বাধ্যতামূলক
-          npm run build -- --configuration=production
-
-      - name: Sync Capacitor with Android
-        run: |
-          cd myApp
-          # অ্যান্ড্রয়েড ফোল্ডার না থাকলে তৈরি করবে, থাকলে সিঙ্ক করবে
-          npx cap add android || echo "Android already exists"
+          npm run build
+          npx cap add android
           npx cap sync android
-
-      - name: Build APK with Gradle
+      - name: Build with Gradle
         run: |
-          cd myApp/android
+          cd android
           chmod +x gradlew
           ./gradlew assembleDebug
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: LoveCounter-App-APK
-          path: myApp/android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
