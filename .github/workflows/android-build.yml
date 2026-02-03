@@ -5,26 +5,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      - name: Install & Build
+
+      - name: Install Dependencies
         run: |
           npm install
-          npm run build
-          npx cap add android
+          npm install @capacitor/android @capacitor/core @capacitor/cli
+
+      - name: Build Web Assets
+        run: |
+          mkdir -p www
+          cp index.html www/
+          # Create a dummy background if needed to avoid sync errors
+          echo " " > www/script.js
+
+      - name: Initialize Android Project
+        run: |
+          npx cap add android || echo "Android already exists"
           npx cap sync android
-      - name: Build with Gradle
+
+      - name: Build APK with Gradle
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
