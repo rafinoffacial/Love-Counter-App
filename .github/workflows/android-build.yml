@@ -10,7 +10,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20' # স্ট্যাবল ভার্সন
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -18,24 +18,21 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Install Dependencies
+      - name: Install Dependencies & Build Web
         run: |
           cd myApp
           npm install
-          # Capacitor Android প্ল্যাটফর্মটি এখানে ইনস্টল করা হচ্ছে
-          npm install @capacitor/android 
+          # অ্যান্ড্রয়েড লাইব্রেরিগুলো জোরপূর্বক ইনস্টল করা হচ্ছে
+          npm install @capacitor/android @capacitor/core @capacitor/cli
+          # 'www' ফোল্ডার তৈরি করার জন্য এই কমান্ডটি বাধ্যতামূলক
+          npm run build -- --configuration=production
 
-      - name: Build Web Assets (www ফোল্ডার তৈরি করা)
+      - name: Sync Capacitor with Android
         run: |
           cd myApp
-          # এটি আপনার কোডকে কম্পাইল করে www ফোল্ডার তৈরি করবে
-          npm run build 
-
-      - name: Prepare Android Project
-        run: |
-          cd myApp
+          # অ্যান্ড্রয়েড ফোল্ডার না থাকলে তৈরি করবে, থাকলে সিঙ্ক করবে
           npx cap add android || echo "Android already exists"
-          npx cap sync
+          npx cap sync android
 
       - name: Build APK with Gradle
         run: |
