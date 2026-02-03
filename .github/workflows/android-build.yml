@@ -12,13 +12,15 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install Tools & Build
+      - name: Install Tools
         run: |
           npm install -g @ionic/cli @capacitor/core @capacitor/cli
-          # Move into project folder and install
+          cd myApp && npm install
+
+      - name: Prepare Android Project
+        run: |
           cd myApp
-          npm install
-          npx cap add android || echo "Android exists"
+          npx cap add android || echo "Android already exists"
           npx cap sync
           
       - name: Build APK with Gradle
