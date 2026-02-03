@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: '20'
           
-      - name: Setup Java
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -22,14 +22,17 @@ jobs:
           npm install
           mkdir -p www
           cp index.html www/
-          npx cap add android || echo "Already exists"
+          # Force clean the android folder to reset configurations
+          rm -rf android
+          npx cap add android
           npx cap sync android
           
-      - name: Build with Gradle
+      - name: Build with Gradle (Forced Java 21)
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          # We explicitly point Gradle to the Java 21 path provided by the action
+          ./gradlew assembleDebug -Dorg.gradle.java.home=$JAVA_HOME
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
