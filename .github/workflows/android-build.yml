@@ -15,7 +15,6 @@ jobs:
       - name: Install Tools
         run: |
           npm install -g @ionic/cli @capacitor/core @capacitor/cli
-          # Move into the correct directory before installing
           cd myApp && npm install
 
       - name: Prepare Android Project
