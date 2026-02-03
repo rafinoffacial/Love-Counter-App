@@ -6,23 +6,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js v22
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22' # এখানে কোটেশন মার্ক ব্যবহার করা নিরাপদ
 
-      - name: Install Tools
+      - name: Setup Java (Android Build এর জন্য প্রয়োজন)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17' # অ্যান্ড্রয়েড বিল্ডের জন্য JDK 17 সবচেয়ে স্থিতিশীল
+
+      - name: Install Ionic and Capacitor
         run: |
-          npm install -g @ionic/cli @capacitor/core @capacitor/cli
+          npm install -g @ionic/cli
           cd myApp && npm install
 
       - name: Prepare Android Project
         run: |
           cd myApp
-          npx cap add android || echo "Android already exists"
-          npx cap sync
-          
+          # npx ব্যবহার করার সময় স্থানীয় ভার্সন ব্যবহার নিশ্চিত করা হচ্ছে
+          ./node_modules/.bin/cap add android || echo "Android already exists"
+          ./node_modules/.bin/cap sync
+
       - name: Build APK with Gradle
         run: |
           cd myApp/android
