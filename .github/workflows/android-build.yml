@@ -7,21 +7,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Node.js
+      - name: Setup Node.js v22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Tools & Build
         run: |
           npm install -g @ionic/cli @capacitor/core @capacitor/cli
+          # Move into project folder and install
+          cd myApp
           npm install
           npx cap add android || echo "Android exists"
           npx cap sync
           
       - name: Build APK with Gradle
         run: |
-          cd android
+          cd myApp/android
           chmod +x gradlew
           ./gradlew assembleDebug
 
@@ -29,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: LoveCounter-App-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: myApp/android/app/build/outputs/apk/debug/app-debug.apk
